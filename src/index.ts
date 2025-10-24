@@ -2,6 +2,9 @@ import { Hono } from 'hono';
 import { marked } from 'marked';
 import { HOME_HTML, CSS } from './content';
 
+const APP_ORIGIN = 'https://app.cookbook.run';
+const DEFAULT_APP_PATH = '/';
+
 const app = new Hono();
 
 // Configure marked
@@ -33,9 +36,39 @@ function parseFrontmatter(markdown: string) {
   return { data, content };
 }
 
+function sanitizeAppRedirect(target?: string | null) {
+  if (!target) {
+    return DEFAULT_APP_PATH;
+  }
+
+  try {
+    const url = new URL(target, APP_ORIGIN);
+    if (url.origin !== APP_ORIGIN) {
+      return DEFAULT_APP_PATH;
+    }
+
+    const path = `${url.pathname}${url.search}${url.hash}`;
+    return path || DEFAULT_APP_PATH;
+  } catch {
+    return DEFAULT_APP_PATH;
+  }
+}
+
+function buildAppSignInUrl(target?: string | null) {
+  const redirect = sanitizeAppRedirect(target);
+  const url = new URL('/sign-in', APP_ORIGIN);
+  url.searchParams.set('redirect', redirect);
+  return url.toString();
+}
+
 // Serve CSS
 app.get('/styles.css', (c) => {
   return c.text(CSS, 200, { 'Content-Type': 'text/css' });
+});
+
+app.get('/sign-in', (c) => {
+  const redirectTarget = buildAppSignInUrl(c.req.query('redirect'));
+  return c.redirect(redirectTarget, 302);
 });
 
 // Serve llms.txt

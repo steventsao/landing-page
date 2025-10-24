@@ -41,7 +41,7 @@ export const HOME_HTML = `<!DOCTYPE html>
           </h1>
           <p class="text-lg md:text-xl text-muted-foreground mb-14 max-w-2xl mx-auto font-normal">Create once, publish to ChatGPT and Claude.</p>
           <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="${SIGN_IN_URL}" class="inline-flex items-center justify-center gap-2 h-11 bg-foreground text-background hover:bg-foreground/90 font-medium px-10 py-6 rounded-full">Start Publishing</a>
+            <a href="${SIGN_IN_URL}" class="inline-flex items-center justify-center gap-2 h-11 bg-foreground text-background hover:bg-foreground/90 font-medium px-10 py-6 rounded-full">Create a Project</a>
             <a href="/blog" class="inline-flex items-center justify-center gap-2 h-11 hover:bg-muted font-medium px-10 py-6 rounded-full">Read Blog</a>
           </div>
         </div>
